@@ -1,0 +1,8 @@
+.netrc
+.env
+*.env
+.netlify/
+node_modules/
+__pycache__/
+build/qa/*.png
+build/cache/live_cci.json
