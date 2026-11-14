@@ -1,49 +1,178 @@
-/* 新约书信深读 GROKstudy v1.0.0 */
+/* 新约书信深读 GROKstudy v3.0.0 */
 (function(){
 "use strict";
 var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 var html=document.documentElement,wide=function(){return innerWidth>1100};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}}
-/* TOC */
-var toc=$('#toc');
+
+/* ----- TOC show/hide ----- */
+var toc=$('#toc'), wrap=$('#tocwrap');
 function tocToggle(force){
   if(wide()){var off=force!==undefined?!force:!html.classList.contains('toc-off');html.classList.toggle('toc-off',off);store('nt-toc',off?'0':'1')}
   else{html.classList.toggle('toc-open',force!==undefined?force:!html.classList.contains('toc-open'))}
 }
-$('#tocbtn').addEventListener('click',function(){tocToggle()});
-$('#tocx').addEventListener('click',function(){tocToggle(false)});
-$('#scrim').addEventListener('click',function(){html.classList.remove('toc-open')});
+if($('#tocbtn')) $('#tocbtn').addEventListener('click',function(){tocToggle()});
+if($('#tocx')) $('#tocx').addEventListener('click',function(){tocToggle(false)});
+if($('#scrim')) $('#scrim').addEventListener('click',function(){html.classList.remove('toc-open')});
 $$('#toc a').forEach(function(a){a.addEventListener('click',function(){if(!wide())html.classList.remove('toc-open')})});
 document.addEventListener('keydown',function(e){
-  if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
   if(e.key==='t'||e.key==='T'){tocToggle()}
-  if(e.key==='Escape'){html.classList.remove('toc-open');hidePop();$('#navdrop').classList.remove('open')}
+  if(e.key==='Escape'){html.classList.remove('toc-open');hidePop();var nd=$('#navdrop');if(nd)nd.classList.remove('open')}
 });
-$('#tocq').addEventListener('input',function(){
+
+/* ----- 3-level collapse ----- */
+function wireTwists(){
+  $$('#toc-page .toc-n').forEach(function(li){
+    var ol=li.querySelector(':scope > ol');
+    var tw=li.querySelector(':scope > .toc-row > .toc-tw');
+    if(!tw)return;
+    var has=ol&&ol.querySelector(':scope > .toc-n');
+    if(!has){tw.hidden=true;return}
+    tw.hidden=false;
+    tw.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();
+      var open=tw.getAttribute('aria-expanded')!=='true';
+      tw.setAttribute('aria-expanded',open?'true':'false');
+      li.classList.toggle('collapsed',!open);
+    });
+  });
+}
+function setAll(open){
+  $$('#toc-page .toc-n').forEach(function(li){
+    var tw=li.querySelector(':scope > .toc-row > .toc-tw');
+    if(!tw||tw.hidden)return;
+    tw.setAttribute('aria-expanded',open?'true':'false');
+    li.classList.toggle('collapsed',!open);
+  });
+}
+function expandAncestors(a){
+  var n=a&&a.closest('.toc-n');
+  while(n){
+    n.classList.remove('collapsed');
+    var tw=n.querySelector(':scope > .toc-row > .toc-tw');
+    if(tw&&!tw.hidden)tw.setAttribute('aria-expanded','true');
+    n=n.parentElement&&n.parentElement.closest('.toc-n');
+  }
+}
+wireTwists();
+if($('#toc-ex')) $('#toc-ex').addEventListener('click',function(){setAll(true)});
+if($('#toc-col')) $('#toc-col').addEventListener('click',function(){setAll(false)});
+
+/* ----- filter (keep ancestors of hits) ----- */
+if($('#tocq')) $('#tocq').addEventListener('input',function(){
   var q=this.value.trim().toLowerCase();
-  $$('#toc li').forEach(function(li){li.classList.toggle('hid',!!q&&li.textContent.toLowerCase().indexOf(q)<0)});
+  $$('#toc-global li').forEach(function(li){li.classList.toggle('hid',!!q&&li.textContent.toLowerCase().indexOf(q)<0)});
+  $$('#toc-page .toc-n').forEach(function(li){li.classList.remove('hid','hid-keep','hit')});
+  if(!q)return;
+  $$('#toc-page .toc-n').forEach(function(li){
+    var a=li.querySelector(':scope > .toc-row > a');
+    var hit=a&&a.textContent.toLowerCase().indexOf(q)>=0;
+    if(hit){
+      li.classList.add('hit');
+      var p=li;
+      while(p){p.classList.add('hid-keep');p=p.parentElement&&p.parentElement.closest('.toc-n')}
+    }
+  });
+  $$('#toc-page .toc-n').forEach(function(li){if(!li.classList.contains('hid-keep'))li.classList.add('hid')});
 });
-/* nav dropdown + theme */
-$('#navbtn').addEventListener('click',function(e){e.stopPropagation();$('#navdrop').classList.toggle('open')});
-document.addEventListener('click',function(e){if(!e.target.closest('#navdrop'))$('#navdrop').classList.remove('open')});
-$('#themebtn').addEventListener('click',function(){var t=html.dataset.theme==='light'?'night':'light';html.dataset.theme=t;store('nt-theme',t);document.dispatchEvent(new CustomEvent('nt-theme'))});
-/* progress, scrollspy, totop */
-var links=$$('#toc a'),heads=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))}),prog=$('#prog'),top=$('#totop'),ticking=false;
+
+/* ----- horizontal resize (mouse + touch / pointer) ----- */
+(function(){
+  var handle=$('#tocresizer'); if(!handle||!wrap)return;
+  var dragging=false,startX=0,startW=0;
+  function limits(){
+    var vw=innerWidth,minW=200,maxW;
+    if(vw<=1100){minW=Math.min(200,Math.max(160,Math.floor(vw*0.42)));maxW=Math.floor(vw*0.94)}
+    else{maxW=Math.min(720,Math.floor(vw*0.70))}
+    return {minW:minW,maxW:maxW};
+  }
+  function apply(w){
+    var L=limits();w=Math.max(L.minW,Math.min(L.maxW,Math.round(w)));
+    html.style.setProperty('--tocw',w+'px');
+    return w;
+  }
+  function down(e){
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    dragging=true;startX=e.clientX;startW=wrap.getBoundingClientRect().width;
+    html.classList.add('toc-dragging','is-scrolling');
+    try{handle.setPointerCapture(e.pointerId)}catch(err){}
+    e.preventDefault();
+  }
+  function move(e){if(!dragging)return;apply(startW+(e.clientX-startX))}
+  function up(e){
+    if(!dragging)return;dragging=false;html.classList.remove('toc-dragging');
+    store('nt-tocw',String(parseInt(getComputedStyle(html).getPropertyValue('--tocw'),10)||300));
+    try{handle.releasePointerCapture(e.pointerId)}catch(err){}
+  }
+  handle.addEventListener('pointerdown',down);
+  handle.addEventListener('pointermove',move);
+  handle.addEventListener('pointerup',up);
+  handle.addEventListener('pointercancel',up);
+  handle.addEventListener('keydown',function(e){
+    var step=e.shiftKey?32:16,w=wrap.getBoundingClientRect().width,nw=w;
+    if(e.key==='ArrowLeft'||e.key==='ArrowDown')nw=w-step;
+    else if(e.key==='ArrowRight'||e.key==='ArrowUp')nw=w+step;
+    else if(e.key==='Home')nw=200;
+    else if(e.key==='End')nw=720;
+    else return;
+    e.preventDefault();store('nt-tocw',String(apply(nw)));
+  });
+  addEventListener('resize',function(){apply(wrap.getBoundingClientRect().width)},{passive:true});
+})();
+
+/* ----- nav dropdown + theme ----- */
+if($('#navbtn')) $('#navbtn').addEventListener('click',function(e){e.stopPropagation();$('#navdrop').classList.toggle('open')});
+document.addEventListener('click',function(e){if(!e.target.closest('#navdrop')){var nd=$('#navdrop');if(nd)nd.classList.remove('open')}});
+if($('#themebtn')) $('#themebtn').addEventListener('click',function(){var t=html.dataset.theme==='light'?'night':'light';html.dataset.theme=t;store('nt-theme',t);document.dispatchEvent(new CustomEvent('nt-theme'))});
+
+/* ----- progress, scrollspy (IO + rAF), totop, is-scrolling ----- */
+var pageLinks=$$('#toc-page a[href^="#"]');
+var heads=pageLinks.map(function(a){return document.getElementById((a.getAttribute('href')||'').slice(1))});
+var prog=$('#prog'),top=$('#totop'),ticking=false,spyTick=false,curIdx=-1,scrollOff;
+function markScrolling(){
+  html.classList.add('is-scrolling');
+  clearTimeout(scrollOff);
+  scrollOff=setTimeout(function(){html.classList.remove('is-scrolling')},160);
+}
+function applySpy(idx){
+  if(idx===curIdx)return;
+  curIdx=idx;
+  pageLinks.forEach(function(a,i){a.classList.toggle('act',i===idx)});
+  if(idx>=0){
+    expandAncestors(pageLinks[idx]);
+    if(toc&&pageLinks[idx]){
+      var a=pageLinks[idx],tr=toc.getBoundingClientRect(),ar=a.getBoundingClientRect();
+      if(ar.top<tr.top+70||ar.bottom>tr.bottom-24)toc.scrollTop+=ar.top-tr.top-tr.height/3;
+    }
+  }
+}
+function computeSpy(){
+  var idx=-1;
+  for(var i=0;i<heads.length;i++){if(heads[i]&&heads[i].getBoundingClientRect().top<130)idx=i}
+  applySpy(idx);
+  spyTick=false;
+}
 function onScroll(){
-  var h=document.documentElement,sc=h.scrollTop||document.body.scrollTop,max=h.scrollHeight-h.clientHeight;
-  prog.style.width=(max>0?sc/max*100:0)+'%';top.classList.toggle('show',sc>600);
-  var cur=-1;for(var i=0;i<heads.length;i++){if(heads[i]&&heads[i].getBoundingClientRect().top<120)cur=i;else if(heads[i])break}
-  links.forEach(function(a,i){a.classList.toggle('act',i===cur)});
-  if(cur>=0&&wide()){var a=links[cur],tr=toc.getBoundingClientRect(),ar=a.getBoundingClientRect();if(ar.top<tr.top+60||ar.bottom>tr.bottom-20)toc.scrollTop+=ar.top-tr.top-tr.height/3}
+  markScrolling();
+  if(prog){var h=document.documentElement,sc=h.scrollTop||document.body.scrollTop,max=h.scrollHeight-h.clientHeight;prog.style.width=(max>0?sc/max*100:0)+'%'}
+  if(top)top.classList.toggle('show',(document.documentElement.scrollTop||document.body.scrollTop)>600);
+  if(!spyTick){spyTick=true;requestAnimationFrame(computeSpy)}
   ticking=false;
 }
-addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});onScroll();
-top.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'})});
+addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+onScroll();
+if('IntersectionObserver' in window && heads.length){
+  var ioSpy=new IntersectionObserver(function(){if(!spyTick){spyTick=true;requestAnimationFrame(computeSpy)}},{rootMargin:'-70px 0px -60% 0px',threshold:[0,1]});
+  heads.forEach(function(el){if(el)ioSpy.observe(el)});
+}
+if(top)top.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'})});
+
 /* reveal */
 if('IntersectionObserver' in window){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
   $$('.reveal').forEach(function(el){io.observe(el)});
 }else $$('.reveal').forEach(function(el){el.classList.add('in')});
+
 /* verse popover */
 var pop=null;
 function hidePop(){if(pop){pop.remove();pop=null}}
@@ -59,14 +188,17 @@ document.addEventListener('click',function(e){
   pop.style.left=x+'px';pop.style.top=y+'px';
 });
 addEventListener('resize',hidePop);
+
 /* flip cards */
 document.addEventListener('click',function(e){var f=e.target.closest('.flip');if(f&&!e.target.closest('.vs'))f.classList.toggle('on')});
 document.addEventListener('keydown',function(e){var f=e.target.closest&&e.target.closest('.flip');if(f&&(e.key==='Enter'||e.key===' ')){e.preventDefault();f.classList.toggle('on')}});
+
 /* timeline filter */
 $$('.tlf button').forEach(function(b){b.addEventListener('click',function(){
   $$('.tlf button').forEach(function(x){x.classList.toggle('on',x===b)});var f=b.dataset.f;
   $$('.tli').forEach(function(li){var show=f==='all'||(f==='ep'?li.classList.contains('ep'):li.classList.contains('c-'+f));li.classList.toggle('hid',!show);if(show)li.classList.add('in')});
 })});
+
 /* map */
 var gm=$('.gmap');
 if(gm){
@@ -78,6 +210,7 @@ if(gm){
     c.addEventListener('click',sel);c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();sel()}});
   });
 }
+
 /* creed recite modes */
 $$('.recite').forEach(function(r){
   var body=$('.rbody',r);
@@ -92,64 +225,57 @@ $$('.recite').forEach(function(r){
   })});
   body.addEventListener('click',function(e){var t=e.target.closest('.rt');if(t&&(body.classList.contains('hint')||body.classList.contains('hide')))t.classList.toggle('show')});
 });
-/* memory page */
-var dEl=$('#epdata');
-if(dEl){
+
+/* memory page — lazy hydrate when in view */
+function hydrateMemory(){
+  var dEl=$('#epdata');
+  if(!dEl||dEl.dataset.ready)return;
+  dEl.dataset.ready='1';
   var D=JSON.parse(dEl.textContent);
   var shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a};
   var fc=$('#fcards');
-  $('#fcshuf').addEventListener('click',function(){shuffle($$('.flip',fc)).forEach(function(c){fc.appendChild(c)})});
-  $('#fcall').addEventListener('click',function(){$$('.flip.on',fc).forEach(function(c){c.classList.remove('on')})});
-  /* cloze */
+  if($('#fcshuf')) $('#fcshuf').addEventListener('click',function(){shuffle($$('.flip',fc)).forEach(function(c){fc.appendChild(c)})});
+  if($('#fcall')) $('#fcall').addEventListener('click',function(){$$('.flip.on',fc).forEach(function(c){c.classList.remove('on')})});
   var cz=$('#cloze');
-  shuffle(D).slice(0,6).forEach(function(d){
-    var t=d.kvt,cands=['神','基督','信心','恩典','义','爱','盼望','圣灵','福音','真理','生命','律法','喜乐','平安','救恩','智慧','荣耀','十字架','行为','圣洁'].filter(function(w){return t.indexOf(w)>=0});
-    var w=cands.length?cands[Math.floor(Math.random()*cands.length)]:t.slice(2,4),i=t.indexOf(w);
-    var row=document.createElement('div');row.className='cz2';var p=document.createElement('p');
-    p.appendChild(document.createTextNode(t.slice(0,i)));var g=document.createElement('span');g.className='gap';g.textContent=w;p.appendChild(g);p.appendChild(document.createTextNode(t.slice(i+w.length)));
-    var s=document.createElement('small');s.textContent='— '+d.kv;var b=document.createElement('button');b.className='btn';b.textContent='显示';b.addEventListener('click',function(){row.classList.toggle('rev')});
-    row.appendChild(p);row.appendChild(s);row.appendChild(b);cz.appendChild(row);
-  });
-  /* quiz */
-  var kinds=[
-    function(d){return{q:'《'+d.n+'》的钥字是？',a:d.kw,o:D.map(function(x){return x.kw})}},
-    function(d){return{q:'“'+d.kvt.slice(0,40)+(d.kvt.length>40?'……':'')+'” 出自哪卷书？',a:d.n,o:D.map(function(x){return x.n})}},
-    function(d){return{q:'《'+d.n+'》大约写于哪里？',a:d.place,o:D.map(function(x){return x.place}),p:1}},
-    function(d){return{q:'记忆钩“'+d.mn.slice(0,34)+(d.mn.length>34?'……':'')+'”对应哪卷书？',a:d.n,o:D.map(function(x){return x.n})}}
-  ];
-  var qi=0,sc=0,cur=null,done=false,ord=[];
-  function newQ(){
-    if(!ord.length)ord=shuffle(D);var d=ord.pop();var k=kinds[Math.floor(Math.random()*kinds.length)](d);
-    var opts=shuffle(k.o.filter(function(x,i,a){return x!==k.a&&a.indexOf(x)===i&&!(k.p&&x.slice(0,2)===k.a.slice(0,2))})).slice(0,3);opts.push(k.a);cur=k;done=false;
-    $('#qzn').textContent='第 '+(++qi)+' 题';$('#qzq').textContent=k.q;$('#qzf').textContent='';var o=$('#qzo');o.innerHTML='';
-    shuffle(opts).forEach(function(t){var b=document.createElement('button');b.textContent=t;b.addEventListener('click',function(){if(done)return;done=true;var ok=t===k.a;if(ok)sc++;b.classList.add(ok?'ok':'no');$$('button',o).forEach(function(x){if(x.textContent===k.a)x.classList.add('ok')});$('#qzs').textContent='得分 '+sc+' / '+qi;$('#qzf').textContent=ok?'✅ 正确！':'❌ 正确答案：'+k.a});o.appendChild(b)});
+  if(cz){
+    shuffle(D).slice(0,6).forEach(function(d){
+      var t=d.kvt,cands=['神','基督','信心','恩典','义','爱','盼望','圣灵','福音','真理','生命','律法','喜乐','平安','救恩','智慧','荣耀','十字架','行为','圣洁'].filter(function(w){return t.indexOf(w)>=0});
+      var w=cands.length?cands[Math.floor(Math.random()*cands.length)]:t.slice(2,4),i=t.indexOf(w);
+      var row=document.createElement('div');row.className='cz2';var p=document.createElement('p');
+      p.appendChild(document.createTextNode(t.slice(0,i)));var g=document.createElement('span');g.className='gap';g.textContent=w;p.appendChild(g);p.appendChild(document.createTextNode(t.slice(i+w.length)));
+      var s=document.createElement('small');s.textContent='— '+d.kv;var b=document.createElement('button');b.className='btn';b.textContent='显示';b.addEventListener('click',function(){row.classList.toggle('rev')});
+      row.appendChild(p);row.appendChild(s);row.appendChild(b);cz.appendChild(row);
+    });
   }
-  $('#qznext').addEventListener('click',newQ);$('#qzre').addEventListener('click',function(){qi=0;sc=0;ord=[];$('#qzs').textContent='得分 0';newQ()});newQ();
-  /* plan */
+  if($('#qzo')){
+    var kinds=[
+      function(d){return{q:'《'+d.n+'》的钥字是？',a:d.kw,o:D.map(function(x){return x.kw})}},
+      function(d){return{q:'“'+d.kvt.slice(0,40)+(d.kvt.length>40?'……':'')+'” 出自哪卷书？',a:d.n,o:D.map(function(x){return x.n})}},
+      function(d){return{q:'《'+d.n+'》大约写于哪里？',a:d.place,o:D.map(function(x){return x.place}),p:1}},
+      function(d){return{q:'记忆钩“'+d.mn.slice(0,34)+(d.mn.length>34?'……':'')+'”对应哪卷书？',a:d.n,o:D.map(function(x){return x.n})}}
+    ];
+    var qi=0,sc=0,cur=null,done=false,ord=[];
+    function newQ(){
+      if(!ord.length)ord=shuffle(D);var d=ord.pop();var k=kinds[Math.floor(Math.random()*kinds.length)](d);
+      var opts=shuffle(k.o.filter(function(x,i,a){return x!==k.a&&a.indexOf(x)===i&&!(k.p&&x.slice(0,2)===k.a.slice(0,2))})).slice(0,3);opts.push(k.a);cur=k;done=false;
+      $('#qzn').textContent='第 '+(++qi)+' 题';$('#qzq').textContent=k.q;$('#qzf').textContent='';var o=$('#qzo');o.innerHTML='';
+      shuffle(opts).forEach(function(t){var b=document.createElement('button');b.textContent=t;b.addEventListener('click',function(){if(done)return;done=true;var ok=t===k.a;if(ok)sc++;b.classList.add(ok?'ok':'no');$$('button',o).forEach(function(x){if(x.textContent===k.a)x.classList.add('ok')});$('#qzs').textContent='得分 '+sc+' / '+qi;$('#qzf').textContent=ok?'✅ 正确！':'❌ 正确答案：'+k.a});o.appendChild(b)});
+    }
+    if($('#qznext')) $('#qznext').addEventListener('click',newQ);
+    if($('#qzre')) $('#qzre').addEventListener('click',function(){qi=0;sc=0;ord=[];$('#qzs').textContent='得分 0';newQ()});
+    newQ();
+  }
   var saved={};try{saved=JSON.parse(store('nt-plan')||'{}')}catch(e){}
   $$('#plan input').forEach(function(c){c.checked=!!saved[c.dataset.d];c.addEventListener('change',function(){saved[c.dataset.d]=c.checked;store('nt-plan',JSON.stringify(saved))})});
 }
-/* draw svg in twoage */
-$$('.twoage').forEach(function(f){var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){$$('.draw',f).forEach(function(d){d.classList.add('in')});o.disconnect()}})});o.observe(f)});
+(function(){
+  var root=$('#epdata')||$('#fcards')||$('#quiz')||$('#plan');
+  if(!root)return;
+  if(!('IntersectionObserver' in window)){hydrateMemory();return}
+  var ioMem=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){hydrateMemory();ioMem.disconnect()}})},{rootMargin:'200px'});
+  ioMem.observe(root);
 })();
 
-/* Lenis inertial scroll — skipped when user prefers reduced motion or if load fails */
-(function(){
-  try{ if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){return}
-  var s=document.createElement("script"); s.src="assets/vendor/lenis.min.js"; s.defer=true;
-  s.onload=function(){
-    if(!window.Lenis) return;
-    var opts={duration:1.05,lerp:.09,smoothWheel:true,syncTouch:false,anchors:true,autoRaf:true,prevent:function(n){return n.closest&&(n.closest("#toc")||n.closest(".imap")||n.closest(".mapscroll")||n.closest(".navdrop"))}};
-    var lenis; try{lenis=new Lenis(opts)}catch(e){try{delete opts.autoRaf;delete opts.anchors;lenis=new Lenis(opts);(function raf(t){lenis.raf(t);requestAnimationFrame(raf)})(0)}catch(e2){return}}
-    document.documentElement.classList.add("lenis");
-    window.NTLenis=lenis;
-    document.querySelectorAll('a[href^="#"]').forEach(function(a){
-      a.addEventListener("click",function(ev){
-        var id=a.getAttribute("href"); if(!id||id==="#")return;
-        var el=document.getElementById(id.slice(1)); if(!el||!lenis)return;
-        ev.preventDefault(); lenis.scrollTo(el,{offset:-70}); history.pushState(null,"",id);
-      });
-    });
-  };
-  document.head.appendChild(s);
+/* draw svg in twoage */
+$$('.twoage').forEach(function(f){var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){$$('.draw',f).forEach(function(d){d.classList.add('in')});o.disconnect()}})});o.observe(f)});
 })();

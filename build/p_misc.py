@@ -32,7 +32,7 @@ def sources(stats):
     b.append('<h2 id="s2">✅ 校验结果（构建时自动生成）</h2><div class="tbl"><table><tbody>'+"".join(f'<tr><td><b>{k}</b></td><td>{v}</td></tr>' for k,v in stats)+'</tbody></table></div>')
     b.append('<h2 id="s3">⚠️ 说明与局限</h2><ul class="src"><li>信条引文逐字取自 ccifellowship.org 的中文译本；其他译本措辞可能不同。</li><li>年代、写作地点、作者问题（如希伯来书）列出改革宗与保守福音派常见观点，学界有其他看法。</li><li>地图路线为依据使徒行传地名连成的示意线，不代表精确的古代道路。</li><li>讲解、口诀与图表为本站学习整理，不是任何教会的正式文件；权威在圣经，其次在教会公认的信条。</li></ul>')
     b.append('<h2 id="s4">🗂️ 版本</h2><div class="tbl"><table><thead><tr><th>版本</th><th>日期（台北时间）</th><th>说明</th></tr></thead><tbody>'
-             '<tr><td>v2.0.0</td><td>2026-11-14</td><td>地图馆：概念图 + 可切换多源互动地图（失败自动回退至 Natural Earth 离线矢量）；笔记标记六色体系；滚动与毛玻璃性能优化；配色刷新。</td></tr>'
+             '<tr><td>v3.0.0</td><td>2026-11-14</td><td>三级可折叠可横向拖宽目录（全站 + 本页、滚动高亮自动展开、宽度记忆）；原生滚动取代 Lenis；滚动时暂停云层与重阴影；地图/历史结构分组。</td></tr><tr><td>v2.0.0</td><td>2026-11-14</td><td>地图馆：概念图 + 可切换多源互动地图（失败自动回退至 Natural Earth 离线矢量）；笔记标记六色体系；滚动与毛玻璃性能优化；配色刷新。</td></tr>'
              '<tr><td>v1.0.0</td><td>2026-10-23</td><td>首次发布：21 卷深读、整本圣经与圣约、时间线、教义主题、三大信经、记忆自测。</td></tr>'
              '</tbody></table></div>')
     return "".join(b)

@@ -162,9 +162,10 @@ def all_maps():
     # 1 empire
     cfg={"center":[36.2,26],"zoom":5,"prefer":"dare","areas":_areas(),
          "places":[_place(k,"city") for k in ("rome","corinth","ephesus","antioch","jerusalem","alexandria","philippi","thessalonica","tarsus")]}
-    out.append(imap("map-empire","一、罗马帝国行省（约主后 60 年）",cfg,sch_empire(),
+    out.append('<h2 id="m-emp">行省：书信的地址系统</h2>')
+    out.append(imap("map-empire","罗马帝国行省（约主后 60 年）",cfg,sch_empire(),
         lead="保罗写信时的“世界”是罗马的行省世界。[[行省]]决定行政、道路、法律与帝王崇拜的压力；书信的收件人就住在这些格子里。",prefer="dare"))
-    out.append('<div class="tbl"><table><thead><tr><th>行省</th><th>关键城市</th><th>相关书信</th><th>当记住的一点</th></tr></thead><tbody>'
+    out.append('<h3 id="m-emp-tbl">行省与书信对照</h3><div class="tbl"><table><thead><tr><th>行省</th><th>关键城市</th><th>相关书信</th><th>当记住的一点</th></tr></thead><tbody>'
                '<tr><td>亚该亚</td><td>哥林多、雅典、坚革哩</td><td>林前、林后；罗马书写于此</td><td>演说、港口、道德混杂</td></tr>'
                '<tr><td>马其顿</td><td>腓立比、帖撒罗尼迦、庇哩亚</td><td>腓、帖前、帖后</td><td>罗马殖民地与大道</td></tr>'
                '<tr><td>亚细亚</td><td>以弗所、歌罗西、老底嘉</td><td>弗、西、门、提前、约壹二三</td><td>亚底米与邪术；教会中心</td></tr>'
@@ -190,10 +191,10 @@ def all_maps():
         cfg={"center":[36.5,24 if jid!="j4" else 22],"zoom":5 if jid!="j4" else 5,"prefer":"dare",
              "routes":[_route(jid,name,col,ks)],
              "places":[_place(k) for k in ks if k in C]}
-        out.append(imap(f"map-{jid}",f'二、{name}' if jid=="j1" else name,cfg,sch_journey(name,col,stops[jid]),lead=leads[jid],prefer="dare"))
+        out.append((" <h2 id=\"m-j\">保罗的行程与航海</h2>" if jid=="j1" else "")+imap(f"map-{jid}",name,cfg,sch_journey(name,col,stops[jid]),lead=leads[jid],prefer="dare"))
 
     # 6 voyage already j4, add imprisonment context
-    out.append(imap("map-prison","三、从被捕到罗马：锁链中的两年+航程",
+    out.append(imap("map-prison","从被捕到罗马：锁链中的两年+航程",
         {"center":[36,22],"zoom":5,"prefer":"dare",
          "routes":[_route("j4",JOURNEYS[3][1],JOURNEYS[3][2],JOURNEYS[3][3])],
          "places":[_place(k) for k in ("jerusalem","caesarea","sidon","myra","crete","malta","syracuse","puteoli","rome") if k in C]},
@@ -203,14 +204,15 @@ def all_maps():
     # 7 peter
     cfg={"center":[39.2,32],"zoom":6,"prefer":"dare","areas":_areas(PETER5),
          "places":[_place(k) for k in ("ephesus","smyrna","pergamum","ancyra","cappadocia","pontus","bithynia","rome")]}
-    out.append(imap("map-peter","四、彼得前书的收信地：小亚五省",cfg,sch_peter(),
+    out.append('<h2 id="m-rec">收信地：分散的群羊</h2>')
+    out.append(imap("map-peter","彼得前书的收信地：小亚五省",cfg,sch_peter(),
         lead="{{彼前1:1}} 点名本都、加拉太、加帕多家、亚西亚、庇推尼。这是 ++寄居者的地图++：分散、受毁谤，却被拣选。传统写作地“巴比伦”指罗马。",prefer="dare"))
 
     # 8 seven churches
     cfg={"center":[38.2,28.2],"zoom":7,"prefer":"dare",
          "routes":[{"id":"7c","name":"七教会顺序（启2–3）","color":"#ffc44d","pts":[{"k":k,"lon":C[k][1],"lat":C[k][2]} for k in SEVEN]}],
          "places":[_place(k,"church") for k in SEVEN]+[_place("colossae"),_place("patmos")]}
-    out.append(imap("map-seven","五、亚细亚七教会：约翰书信的邻里",cfg,sch_seven(),
+    out.append(imap("map-seven","亚细亚七教会：约翰书信的邻里",cfg,sch_seven(),
         lead="启示录的七城是以弗所邮路上一圈。约翰书信写于以弗所一带，针对否认“耶稣基督是成了肉身来的”的！！敌基督教导！！。歌罗西与老底嘉相邻，西 4:16 要求互换书信。",prefer="dare"))
 
     # 9 diaspora
@@ -220,7 +222,7 @@ def all_maps():
             {"k":"antioch","lon":36.16,"lat":36.20},{"k":"ephesus","lon":27.34,"lat":37.94},
             {"k":"corinth","lon":22.88,"lat":37.91},{"k":"rome","lon":12.48,"lat":41.89}]}],
          "places":[_place(k) for k in ("jerusalem","caesarea","antioch","damascus","alexandria","ephesus","corinth","philippi","rome")]}
-    out.append(imap("map-dia","六、从耶路撒冷到地极（徒 1:8 的地理）",cfg,sch_diaspora(),
+    out.append(imap("map-dia","从耶路撒冷到地极（徒 1:8 的地理）",cfg,sch_diaspora(),
         lead="**先是耶路撒冷，然后犹太、撒玛利亚，直到地极。** 逼迫使信徒分散（徒 8）；安提阿成为外邦宣教的母会；书信就是这条路线上的“牧养邮件”。",prefer="osm"))
 
     # 10 letters network
@@ -237,7 +239,7 @@ def letters_map(eps):
     keys=sorted({e["fr"] for e in eps}|{e["dest"] for e in eps})
     cfg={"center":[36.5,24],"zoom":5,"prefer":"carto","routes":routes,"places":[_place(k) for k in keys if k in C]}
     lead="每一封书信都有**写作地**与**收信地**。点按城市或路线查看。左侧概念图先建立“有地址的神学”这一观念。"
-    return imap("map-letters","七、21 卷书信：写作地 → 收信地",cfg,sch_letters(),lead=lead,prefer="carto")
+    return imap("map-letters","21 卷书信：写作地 → 收信地",cfg,sch_letters(),lead=lead,prefer="carto")
 
 def letter_imap(e):
     """供各书卷页：SVG 迷你图下方可展开的互动地图。"""

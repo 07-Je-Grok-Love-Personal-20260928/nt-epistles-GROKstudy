@@ -26,14 +26,14 @@ def epistle(e):
 <h2 id="{i}-t" class="ep-h"><span class="ei">{e["ic"]}</span>{e["n"]} <small>{e["en"]} · {gname}</small></h2>
 <div class="ep-banner glass reveal"><div class="kwbox"><span class="kwl">钥字</span><span class="kw">{e["kw"]}</span></div><p class="core">💎 {md(e["core"])}</p>{verse_card(e["kv"])}</div>
 <div class="facts-wrap"><div class="facts">{fx}</div><figure class="mm glass">{minimap(e)}<figcaption>✍ 写作地 → 📬 收信地（离线矢量底图：Natural Earth）</figcaption>{letter_imap(e)}</figure></div>
-<h3 id="{i}-bg">🏺 背景与真实情境</h3><div class="two"><div class="card glass"><h4>历史背景</h4><p>{md(e["bg"])}</p></div><div class="card glass culture"><h4>🌍 文化区域特征</h4><p>{md(e["cul"])}</p></div></div>
+<h3 id="{i}-bg">🏺 背景与真实情境</h3><div class="two"><div class="card glass"><h4 id="{i}-bg-h">历史背景</h4><p>{md(e["bg"])}</p></div><div class="card glass culture"><h4 id="{i}-bg-c">🌍 文化区域特征</h4><p>{md(e["cul"])}</p></div></div>
 <h3 id="{i}-why">❓ 为什么写（前因后果）</h3>{flow(e["why"], "于是写下《"+e["n"]+"》")}
-<h3 id="{i}-what">📐 写了什么（结构）</h3>{sbar(e["ol"])}<ol class="outline">{ol}</ol><div class="angs">{angs}</div>
+<h3 id="{i}-what">📐 写了什么（结构）</h3><h4 id="{i}-what-ol">结构大纲</h4>{sbar(e["ol"])}<ol class="outline">{ol}</ol><h4 id="{i}-what-ang">四个视角</h4><div class="angs">{angs}</div>
 <h3 id="{i}-bt">📜 圣经神学：在整本圣经中的位置</h3><div class="card glass bt"><p>{md(e["bt"])}</p></div>
 <h3 id="{i}-ct">🤝 圣约神学</h3><div class="card glass ct"><p>{md(e["ct"])}</p></div>
-<h3 id="{i}-kh">🎯 重点与难点</h3><div class="two"><div class="card glass"><h4>⭐ 重点</h4><ul class="keys">{keys}</ul></div><div class="card glass"><h4>⚠️ 难点（点开看改革宗解答）</h4>{hards}</div></div>
+<h3 id="{i}-kh">🎯 重点与难点</h3><div class="two"><div class="card glass"><h4 id="{i}-key">⭐ 重点</h4><ul class="keys">{keys}</ul></div><div class="card glass"><h4 id="{i}-hard">⚠️ 难点</h4>{hards}</div></div>
 <h3 id="{i}-cf">📘 信条对照（CCI 逐字）</h3><div class="confs">{confs}</div>
-<h3 id="{i}-ap">🌱 应用与记忆</h3><div class="two"><div class="card glass"><h4>今天怎样活</h4><ul class="apps">{apps}</ul></div><div class="flip" tabindex="0" role="button" aria-label="翻转记忆卡"><div class="fi-in"><div class="ff"><span>🧠 记忆钩</span><b>{e["n"]}</b><em>点按翻转</em></div><div class="fb"><p>{md(e["mn"])}</p></div></div></div></div>
+<h3 id="{i}-ap">🌱 应用与记忆</h3><div class="two"><div class="card glass"><h4 id="{i}-app">今天怎样活</h4><ul class="apps">{apps}</ul></div><div><h4 id="{i}-mn">记忆钩</h4><div class="flip" tabindex="0" role="button" aria-label="翻转记忆卡"><div class="fi-in"><div class="ff"><span>🧠 记忆钩</span><b>{e["n"]}</b><em>点按翻转</em></div><div class="fb"><p>{md(e["mn"])}</p></div></div></div></div></div>
 </section>'''
 def mindtree(title, eps):
     br="".join(f'<li style="--gc:{GN[e["g"]][1]}"><a href="#{e["id"]}" class="mt-b">{e["ic"]} {e["n"]} · <b>{e["kw"]}</b></a><ul>'+"".join(f'<li><span>{t}</span></li>' for _,t,_ in e["ol"][:4])+'</ul></li>' for e in eps)

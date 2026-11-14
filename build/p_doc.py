@@ -14,8 +14,9 @@ T=[("d1","🔺","三一神与基督的位格","书信是三一神论与基督论
 def build():
     b=['<div class="dmap glass reveal"><div class="dm-c">📨 书信教义<br><small>十大主题</small></div><div class="dm-r">'+"".join(f'<a href="#{i}" class="dm-n" style="--i:{k}">{ic} {t}</a>' for k,(i,ic,t,*_) in enumerate(T))+'</div></div>']
     for i,ic,t,s,refs,qs,w in T:
-        b.append(f'<h2 id="{i}">{ic} {t}</h2><div class="card glass"><p>{md(s)}</p><p class="refs">📨 主要经文：{esc(refs)}</p></div>')
-        b.append('<div class="confs">'+"".join(cq(q) for q in qs)+(wq(w[0],*w[1:]) if w and w[0]=='wcf' else (wq(w[0],w[1]) if w else ""))+'</div>')
+        b.append(f'<h2 id="{i}">{ic} {t}</h2>')
+        b.append(f'<h3 id="{i}-txt">经文要义</h3><div class="card glass"><p>{md(s)}</p><p class="refs">📨 主要经文：{esc(refs)}</p></div>')
+        b.append(f'<h3 id="{i}-cf">信条对照</h3><div class="confs">'+"".join(cq(q) for q in qs)+(wq(w[0],*w[1:]) if w and w[0]=='wcf' else (wq(w[0],w[1]) if w else ""))+'</div>')
     b.append('<h2 id="dw">📙 三项联合信条 vs 威斯敏斯特标准：侧重比较</h2>')
     R=[("圣约结构","在洗礼、儿女、拣选中运用圣约语言；未单列“行为之约”","第 7 章明确区分行为之约与恩典之约"),("风格","海德堡：个人、敬拜性（“我唯一的安慰”）","系统、精确、逻辑性强"),("结构","HC：罪—救—恩（像罗马书）","从圣经、神论到末世的系统次序"),
        ("拣选的表述","多特：牧养性（确据、安慰）","第 3 章：预旨的完整论述"),("安息日","HC 103：敬拜与安息的属灵意义","第 21 章：主日为基督徒的安息日"),("教会政体","BC 30–32：牧师、长老、执事组成议会","长老会体制，区会、大会")]

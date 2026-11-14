@@ -64,6 +64,10 @@ def build(eps):
     b.append(f'<h2 id="h3">三、地图：保罗的行程与书信的路线</h2><div class="mapbox glass"><div class="maptools">{lg}<button class="lb play" id="playroutes">▶ 播放路线</button></div><p class="maphint">👉 手机上可左右滑动地图</p><div class="mapscroll" id="bigmap">{bigmap(eps)}</div><div id="cityinfo" class="cityinfo" aria-live="polite">点按地图上的城市，查看与它相关的书信。</div><p class="note">本图为离线静态总图（Natural Earth）。需要缩放、切换卫星/古图或查看行省、航海、七教会等专题，请到 <a href="maps.html">地图馆</a>：每张图都配有概念讲解图 + 可切换底图的互动地图（网络失败自动回退到离线矢量）。</p></div>')
     b.append(tip("key","先走故事再看地图","时间线给你年代，故事线给你因果，地图给你地点。三者合在一起，书信才不再是抽象篇章。"))
     b.append('<p class="note"><a class="btn" href="maps.html">进入地图馆 →</a></p>')
-    b.append('<h2 id="h4">四、收信地与文化区域</h2><div class="tbl"><table><thead><tr><th>地区</th><th>主要城市</th><th>相关书信</th><th>社会文化特征</th><th>宗教环境</th></tr></thead><tbody>'+"".join(f'<tr><td><b>{a}</b></td><td>{c}</td><td>{d}</td><td>{e}</td><td>{f}</td></tr>' for a,c,d,e,f in REG)+'</tbody></table></div>')
-    b.append('<h2 id="h5">五、希腊罗马世界的十个关键词</h2><div class="kws">'+"".join(f'<div class="kwc glass reveal"><span>{a}</span><b>{c}</b><p>{md(d)}</p></div>' for a,c,d in KW)+'</div>')
+    b.append('<h2 id="h4">四、收信地与文化区域</h2><h3 id="h4a">区域特征一览</h3><div class="tbl"><table><thead><tr><th>地区</th><th>主要城市</th><th>相关书信</th><th>社会文化特征</th><th>宗教环境</th></tr></thead><tbody>'+"".join(f'<tr><td><b>{a}</b></td><td>{c}</td><td>{d}</td><td>{e}</td><td>{f}</td></tr>' for a,c,d,e,f in REG)+'</tbody></table></div>')
+    b.append('<h2 id="h5">五、希腊罗马世界的十个关键词</h2><h3 id="h5a">十词记一页</h3><div class="kws">'+"".join(f'<div class="kwc glass reveal"><span>{a}</span><b>{c}</b><p>{md(d)}</p></div>' for a,c,d in KW)+'</div>')
+    b.append('<h3 id="h5b">罗马世界怎样托住福音</h3><div class="flow">'
+             +''.join(f'<div class="fstep"><span class="n">{i}</span>{t}</div>'+('<i class="farr">➜</i>' if i<5 else '')
+                      for i,t in enumerate(["罗马和平：道路与海运", "共同语言：希腊文（七十士译本）", "会堂网络：先是犹太人", "城市家庭教会：书信被宣读", "逼迫与寄居：把认信炼成盼望"], start=1))
+             +'</div>')
     return "".join(b)

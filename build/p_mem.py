@@ -9,7 +9,7 @@ def data(eps):
 CHRONO=["jas","gal","1th","2th","1co","2co","rom","eph","col","phm","php","1ti","tit","1pe","2ti","2pe","heb","jud","1jn","2jn","3jn"]
 def build(eps):
     D=data(eps); by={d["id"]:d for d in D}
-    b=['<h2 id="m1">一、书卷顺序口诀</h2><div class="mnem glass reveal"><p class="big">罗 林 林 加 弗 腓 西，<br>帖 帖 提 提 多 门 希；<br>雅 彼 彼 约 约 约 犹。</p><p class="note">按和合本正典顺序：前两句是保罗书信（13 卷）与希伯来书，第三句是七卷大公书信。节奏 7-7-7，正好 21 卷。</p></div>']
+    b=['<h2 id="m1">书卷顺序口诀</h2><h3 id="m1a">正典顺序</h3><div class="mnem glass reveal"><p class="big">罗 林 林 加 弗 腓 西，<br>帖 帖 提 提 多 门 希；<br>雅 彼 彼 约 约 约 犹。</p><p class="note">按和合本正典顺序：前两句是保罗书信（13 卷）与希伯来书，第三句是七卷大公书信。节奏 7-7-7，正好 21 卷。</p></div>']
     b.append('<div class="chips">'+"".join(f'<a class="chip" href="{d["pg"]}" style="--c:{d["c"]}"><span>{d["ic"]}</span>{d["ab"]}<small>{d["kw"]}</small></a>' for d in D)+'</div>')
     b.append('<h3 id="m1b">📅 写作先后（近似）</h3><div class="chips chrono">'+"".join(f'<a class="chip" href="{by[i]["pg"]}" style="--c:{by[i]["c"]}"><b>{k+1}</b>{by[i]["ab"]}</a>' for k,i in enumerate(CHRONO))+'</div><p class="note">口诀：<b class="key">雅加帖帖林林罗</b>（早期七卷：45–57 年）→ <b class="key">弗西门腓</b>（狱中）→ <b class="key">提多彼提彼</b>（60 年代）→ <b class="key">来犹约约约</b>（晚期）。</p>')
     b.append('<h2 id="m2">二、21 卷钥字 + 记忆钩</h2><div class="tbl"><table><thead><tr><th>书卷</th><th>钥字</th><th>钥节</th><th>记忆钩</th><th>何时 · 何地</th></tr></thead><tbody>'+"".join(f'<tr style="--c:{d["c"]}"><td class="bk"><a href="{d["pg"]}">{d["ic"]} {d["n"]}</a></td><td><b class="key">{d["kw"]}</b></td><td><button type="button" class="vs" data-t="{esc(d["kvt"])}">{d["kv"]}</button></td><td>{esc(d["mn"])}</td><td><small>{esc(d["date"])} · {esc(d["place"])}</small></td></tr>' for d in D)+'</tbody></table></div>')

@@ -2,7 +2,7 @@
 import json, re, html as H
 from bible import verses
 CCI = "/workspace/cci"
-VER = "v2.0.0"; DATE = "2026-11-14"; ASSET_V = "20261114a"
+VER = "v3.0.0"; DATE = "2026-11-14"; ASSET_V = "20261114c"
 def strip(t): return re.sub(r'\^\d+', '', t)
 _c = json.load(open(f"{CCI}/creeds.json")); _h = json.load(open(f"{CCI}/heidelberg.json"))
 _b = json.load(open(f"{CCI}/belgic.json")); _d = json.load(open(f"{CCI}/dort.json"))
@@ -84,34 +84,83 @@ NAV = [("index.html","🏠","首页"),("bible.html","📜","圣经·圣约"),("h
        ("general.html","⛪","大公书信"),("doctrine.html","📘","教义"),("creeds.html","✝️","三大信经"),
        ("memory.html","🧠","记忆"),("sources.html","🔖","来源")]
 
-def toc_from(body):
-    items = re.findall(r'<h([23]) id="([^"]+)"[^>]*>(.*?)</h\1>', body)
-    out = ['<ol class="toc-l">']; open2 = False
-    for lv, i, t in items:
-        txt = re.sub(r'<[^>]+>', '', t)
-        if lv == '2':
-            if open2: out.append('</ol></li>')
-            out.append(f'<li><a href="#{i}" class="t2">{txt}</a><ol>'); open2 = True
-        else:
-            out.append(f'<li><a href="#{i}" class="t3">{txt}</a></li>')
-    if open2: out.append('</ol></li>')
-    out.append('</ol>'); return "".join(out)
+CN="一二三四五六七八九十"
+def cn(n):
+    if n<=0: return str(n)
+    if n<=10: return CN[n-1]
+    if n<20: return "十"+CN[n-11]
+    if n%10==0: return CN[n//10-1]+"十"
+    return CN[n//10-1]+"十"+CN[n%10-1]
+
+def _plain(t):
+    t=re.sub(r'<[^>]+>','',t)
+    t=re.sub(r'^[一二三四五六七八九十百]+、\s*','',t)
+    t=re.sub(r'^\d+\.\d+(?:\.\d+)?\s*','',t)
+    return t.strip()
+
+def number_and_toc(body, fn=""):
+    rx=re.compile(r'<h([2-4]) id="([^"]+)"([^>]*)>(.*?)</h\1>', re.S)
+    n2=n3=n4=0; items=[]; parts=[]; last=0
+    for m in rx.finditer(body):
+        lv,hid,attrs,inner=int(m.group(1)),m.group(2),m.group(3),m.group(4)
+        if lv==2: n2+=1; n3=0; n4=0; num=cn(n2)+"、"
+        elif lv==3: n3+=1; n4=0; num=f"{n2}.{n3} "
+        else: n4+=1; num=f"{n2}.{n3}.{n4} "
+        plain=_plain(inner)
+        stripped=re.sub(r'^[一二三四五六七八九十百]+、\s*','',re.sub(r'^\d+\.\d+(?:\.\d+)?\s*','',inner,count=1),count=1)
+        labeled=f'<span class="hnum">{num}</span>{stripped}'
+        parts.append(body[last:m.start()]); parts.append(f'<h{lv} id="{hid}"{attrs}>{labeled}</h{lv}>'); last=m.end()
+        items.append((lv,hid,num+plain))
+    parts.append(body[last:]); body="".join(parts)
+    return body, toc_html(items, fn)
+
+def toc_html(items, fn):
+    g=['<div class="toc-sec" id="toc-global"><div class="toc-sh">全站</div><ol class="toc-g">']
+    for i,(h,ic,t) in enumerate(NAV,1):
+        g.append(f'<li><a href="{h}" class="{"on" if h==fn else ""}"><span class="hnum">{cn(i)}、</span>{ic} {t}</a></li>')
+    g.append('</ol></div>')
+    if not items:
+        return "".join(g)+'<div class="toc-sec"><div class="toc-sh">本页</div><p class="toc-empty">本页无分节标题。</p></div>'
+    def close_to(lv, st):
+        out=[]
+        while st and st[-1]>=lv:
+            out.append('</ol></li>'); st.pop()
+        return "".join(out)
+    html=['<div class="toc-sec" id="toc-page"><div class="toc-sh">本页</div><ol class="toc-l">']
+    st=[]
+    for lv,hid,txt in items:
+        html.append(close_to(lv, st))
+        html.append(f'<li class="toc-n lv{lv}" data-lv="{lv}"><div class="toc-row"><button type="button" class="toc-tw" aria-expanded="true" hidden aria-label="折叠"></button><a href="#{hid}" class="t{lv}">{esc(txt)}</a></div><ol>')
+        st.append(lv)
+    html.append(close_to(1, st))
+    html.append('</ol></div>')
+    return "".join(g)+"".join(html)
 
 def page(fn, title, sub, body, hero_cls="", extra_head=""):
+    body, toc = number_and_toc(body, fn)
     nav = "".join(f'<a href="{h}" class="{"on" if h==fn else ""}"><span>{i}</span>{t}</a>' for h, i, t in NAV)
     idx = [h for h, _, _ in NAV].index(fn)
     prv = NAV[idx-1] if idx > 0 else None; nxt = NAV[idx+1] if idx < len(NAV)-1 else None
     pn = '<nav class="pn">' + (f'<a href="{prv[0]}">← {prv[1]} {prv[2]}</a>' if prv else '<span></span>') + (f'<a href="{nxt[0]}">{nxt[1]} {nxt[2]} →</a>' if nxt else '<span></span>') + '</nav>'
-    return f'''<!doctype html><html lang="zh-CN" data-theme="night"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    pref = (f'<link rel="prefetch" href="{prv[0]}">' if prv else '') + (f'<link rel="prefetch" href="{nxt[0]}">' if nxt else '')
+    return f"""<!doctype html><html lang="zh-CN" data-theme="night"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{esc(title)} · 新约书信深读 GROKstudy</title><meta name="description" content="{esc(sub)}">
-<script>try{{var t=localStorage.getItem('nt-theme');if(t)document.documentElement.dataset.theme=t;if(localStorage.getItem('nt-toc')==='0')document.documentElement.classList.add('toc-off')}}catch(e){{}}</script>
-<link rel="stylesheet" href="assets/style.css?v={ASSET_V}">{extra_head}</head><body>
+<script>try{{var t=localStorage.getItem('nt-theme');if(t)document.documentElement.dataset.theme=t;if(localStorage.getItem('nt-toc')==='0')document.documentElement.classList.add('toc-off');var w=parseInt(localStorage.getItem('nt-tocw')||'0',10);if(w>=200&&w<=800)document.documentElement.style.setProperty('--tocw',w+'px')}}catch(e){{}}</script>
+<link rel="stylesheet" href="assets/style.css?v={ASSET_V}">{pref}{extra_head}</head><body>
 <a class="skip" href="#main">跳到正文</a>
 <div class="bg" aria-hidden="true"><i></i><i></i><i></i></div><div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div><div id="prog"></div>
 <header class="top"><button id="tocbtn" class="ib" aria-label="目录" title="显示/隐藏目录 (T)">☰</button><a class="brand" href="index.html">📖 新约书信<b>深读</b></a>
 <nav class="mainnav">{nav}</nav><button id="navbtn" class="ib" aria-label="页面菜单">▦</button><button id="themebtn" class="ib" aria-label="切换主题" title="切换明暗">🌗</button></header>
 <div class="navdrop" id="navdrop">{nav}</div>
-<aside id="toc" aria-label="本页目录"><div class="toc-h"><b>📑 本页目录</b><input id="tocq" type="search" placeholder="筛选目录…" aria-label="筛选目录"><button class="ib sm" id="tocx" aria-label="收起目录">✕</button></div>{toc_from(body)}</aside>
+<div id="tocwrap">
+<aside id="toc" aria-label="目录">
+<div class="toc-h"><b>📑 目录</b>
+<div class="toc-btns"><button type="button" class="btn sm" id="toc-ex" title="全部展开">全部展开</button><button type="button" class="btn sm" id="toc-col" title="全部折叠">全部折叠</button></div>
+<input id="tocq" type="search" placeholder="筛选目录…" aria-label="筛选目录"><button class="ib sm" id="tocx" aria-label="收起目录">✕</button></div>
+{toc}
+</aside>
+<div id="tocresizer" role="separator" aria-orientation="vertical" aria-label="拖动调整目录宽度" tabindex="0"></div>
+</div>
 <div id="scrim"></div>
 <main id="main"><section class="hero {hero_cls}"><div class="hero-in"><p class="eyebrow">新约书信 · 欧陆改革宗深读 · {VER}</p><h1>{title}</h1><p class="sub">{sub}</p></div></section>
 <div class="legend" id="legend"><span class="key">重点</span><span class="hard">难点</span><span class="cov">圣约</span><span class="term">术语</span><span class="app">应用</span><span class="mnemo">记忆</span><button type="button" class="vs" data-t="点按蓝色经文出处，可弹出和合本经文。">经文出处</button><span class="lg-cci">📘📗📕 CCI 逐字引文</span></div>
@@ -119,7 +168,8 @@ def page(fn, title, sub, body, hero_cls="", extra_head=""):
 {pn}
 <footer class="foot glass"><p>新约书信深读 · nt-epistles-{DATE.replace("-","")}-{VER}-GROKstudy · 信经与信条引文逐字取自 <a href="https://ccifellowship.org/books/book-of-praise" target="_blank" rel="noopener">ccifellowship.org《敬拜手册》</a>（构建时程序核对）；经文为和合本。讲解、图表与口诀为本站学习整理。</p></footer>
 </main><button id="totop" class="fab" aria-label="回到顶部">↑</button>
-<script src="assets/app.js?v={ASSET_V}" defer></script><script src="assets/maps.js?v={ASSET_V}" defer></script></body></html>'''
+<script src="assets/app.js?v={ASSET_V}" defer></script><script src="assets/maps.js?v={ASSET_V}" defer></script></body></html>"""
+
 
 _W = json.load(open("/workspace/Westminster-Standards-GROKstudy/generator/data/standards.json"))
 def _ws(t): return re.sub(r'⟦\d+⟧', '', t)
