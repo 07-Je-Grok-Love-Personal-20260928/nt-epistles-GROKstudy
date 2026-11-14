@@ -1,90 +1,218 @@
 {
- "375/bible.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/bible.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/creeds.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/creeds.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/doctrine.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/doctrine.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/general.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/general.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/history.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/history.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/index.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/index.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/memory.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/maps.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/paul-major.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/memory.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/paul-pastoral.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/paul-major.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/paul-prison.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/paul-pastoral.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
- "375/sources.html": {
-  "sw": 375,
-  "vw": 375,
+ "360/paul-prison.html": {
+  "sw": 360,
+  "vw": 360,
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "360/sources.html": {
+  "sw": 360,
+  "vw": 360,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/bible.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/creeds.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/doctrine.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/general.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/history.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/index.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/maps.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/memory.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/paul-major.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/paul-pastoral.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/paul-prison.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "390/sources.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/bible.html": {
@@ -93,6 +221,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/creeds.html": {
@@ -101,6 +230,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/doctrine.html": {
@@ -109,6 +239,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/general.html": {
@@ -117,6 +248,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/history.html": {
@@ -125,6 +257,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/index.html": {
@@ -133,6 +266,16 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "768/maps.html": {
+  "sw": 768,
+  "vw": 768,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/memory.html": {
@@ -141,6 +284,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/paul-major.html": {
@@ -149,6 +293,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/paul-pastoral.html": {
@@ -157,6 +302,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/paul-prison.html": {
@@ -165,6 +311,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "768/sources.html": {
@@ -173,6 +320,115 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/bible.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/creeds.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/doctrine.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/general.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/history.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/index.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/maps.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/memory.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/paul-major.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/paul-pastoral.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/paul-prison.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1024/sources.html": {
+  "sw": 1024,
+  "vw": 1024,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/bible.html": {
@@ -181,6 +437,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/creeds.html": {
@@ -189,6 +446,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/doctrine.html": {
@@ -197,6 +455,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/general.html": {
@@ -205,6 +464,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/history.html": {
@@ -213,6 +473,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/index.html": {
@@ -221,6 +482,16 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1440/maps.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/memory.html": {
@@ -229,6 +500,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/paul-major.html": {
@@ -237,6 +509,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/paul-pastoral.html": {
@@ -245,6 +518,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/paul-prison.html": {
@@ -253,6 +527,7 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
  },
  "1440/sources.html": {
@@ -261,6 +536,340 @@
   "off": [],
   "clip": [],
   "hdr": [],
+  "js": 0,
   "errs": []
+ },
+ "1920/bible.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/creeds.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/doctrine.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/general.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/history.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/index.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/maps.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/memory.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/paul-major.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [
+   "fi-in 1062→1925"
+  ],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/paul-pastoral.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/paul-prison.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "1920/sources.html": {
+  "sw": 1920,
+  "vw": 1920,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/bible.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/creeds.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/doctrine.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/general.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/history.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/index.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/maps.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/memory.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/paul-major.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/paul-pastoral.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/paul-prison.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-390/sources.html": {
+  "sw": 390,
+  "vw": 390,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/bible.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/creeds.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/doctrine.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/general.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/history.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/index.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/maps.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/memory.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/paul-major.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/paul-pastoral.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/paul-prison.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "pass2-1440/sources.html": {
+  "sw": 1440,
+  "vw": 1440,
+  "off": [],
+  "clip": [],
+  "hdr": [],
+  "js": 0,
+  "errs": []
+ },
+ "tile-fallback": {
+  "st": "底图：CARTO Positron（已自动切换）",
+  "src": "carto",
+  "paths": 85,
+  "ready": true,
+  "tiles": 9
  }
 }

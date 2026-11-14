@@ -2,7 +2,7 @@
 import json, re, html as H
 from bible import verses
 CCI = "/workspace/cci"
-VER = "v1.0.0"; DATE = "2026-10-23"; ASSET_V = "20261023a"
+VER = "v2.0.0"; DATE = "2026-11-14"; ASSET_V = "20261114a"
 def strip(t): return re.sub(r'\^\d+', '', t)
 _c = json.load(open(f"{CCI}/creeds.json")); _h = json.load(open(f"{CCI}/heidelberg.json"))
 _b = json.load(open(f"{CCI}/belgic.json")); _d = json.load(open(f"{CCI}/dort.json"))
@@ -63,6 +63,8 @@ def md(s):
         if t: return f'<button type="button" class="vs" data-t="{esc(t)}">{esc(r)}</button>'
         return f'<span class="vs0">{esc(r)}</span>'
     s = re.sub(r'\{\{(.+?)\}\}', vref, s)
+    s = re.sub(r'\+\+(.+?)\+\+', r'<span class="app">\1</span>', s)
+    s = re.sub(r'@@(.+?)@@', r'<span class="mnemo">\1</span>', s)
     s = re.sub(r'\*\*(.+?)\*\*', r'<b class="key">\1</b>', s)
     s = re.sub(r'!!(.+?)!!', r'<span class="hard">\1</span>', s)
     s = re.sub(r'==(.+?)==', r'<span class="cov">\1</span>', s)
@@ -72,11 +74,15 @@ def md(s):
 def verse_card(ref, cls=""):
     t = vtext(ref); assert t, ref
     return f'<figure class="kv {cls}"><blockquote>{esc(t)}</blockquote><figcaption>— {esc(ref)}（和合本）</figcaption></figure>'
+TIPN={"key":("重点","✦"),"hard":("难点","⚠"),"cov":("圣约","🤝"),"term":("术语","◈"),"app":("应用","🌱"),"mnemo":("记忆","🧠")}
+def tip(kind, title, body):
+    n,ic=TIPN[kind]
+    return f'<aside class="tip t-{kind}"><span class="tip-k">{ic} {n}</span><b>{title}</b><p>{md(body)}</p></aside>' 
 
-NAV = [("index.html","🏠","首页总览"),("bible.html","📜","整本圣经·圣约"),("history.html","🗺️","时间·故事·地图"),
-       ("paul-major.html","⚖️","保罗四大书信"),("paul-prison.html","⛓️","帖撒罗尼迦·狱中书信"),("paul-pastoral.html","🏠","教牧书信"),
-       ("general.html","⛪","希伯来书·大公书信"),("doctrine.html","🧭","教义主题·信条"),("creeds.html","✝️","三大信经"),
-       ("memory.html","🧠","记忆·自测"),("sources.html","🔖","来源·校验")]
+NAV = [("index.html","🏠","首页"),("bible.html","📜","圣经·圣约"),("history.html","🗺️","时间线"),("maps.html","🧭","地图馆"),
+       ("paul-major.html","⚖️","四大书信"),("paul-prison.html","⛓️","狱中书信"),("paul-pastoral.html","🏠","教牧书信"),
+       ("general.html","⛪","大公书信"),("doctrine.html","📘","教义"),("creeds.html","✝️","三大信经"),
+       ("memory.html","🧠","记忆"),("sources.html","🔖","来源")]
 
 def toc_from(body):
     items = re.findall(r'<h([23]) id="([^"]+)"[^>]*>(.*?)</h\1>', body)
@@ -100,19 +106,20 @@ def page(fn, title, sub, body, hero_cls="", extra_head=""):
 <title>{esc(title)} · 新约书信深读 GROKstudy</title><meta name="description" content="{esc(sub)}">
 <script>try{{var t=localStorage.getItem('nt-theme');if(t)document.documentElement.dataset.theme=t;if(localStorage.getItem('nt-toc')==='0')document.documentElement.classList.add('toc-off')}}catch(e){{}}</script>
 <link rel="stylesheet" href="assets/style.css?v={ASSET_V}">{extra_head}</head><body>
-<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div><div id="prog"></div>
+<a class="skip" href="#main">跳到正文</a>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div><div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div><div id="prog"></div>
 <header class="top"><button id="tocbtn" class="ib" aria-label="目录" title="显示/隐藏目录 (T)">☰</button><a class="brand" href="index.html">📖 新约书信<b>深读</b></a>
 <nav class="mainnav">{nav}</nav><button id="navbtn" class="ib" aria-label="页面菜单">▦</button><button id="themebtn" class="ib" aria-label="切换主题" title="切换明暗">🌗</button></header>
 <div class="navdrop" id="navdrop">{nav}</div>
 <aside id="toc" aria-label="本页目录"><div class="toc-h"><b>📑 本页目录</b><input id="tocq" type="search" placeholder="筛选目录…" aria-label="筛选目录"><button class="ib sm" id="tocx" aria-label="收起目录">✕</button></div>{toc_from(body)}</aside>
 <div id="scrim"></div>
 <main id="main"><section class="hero {hero_cls}"><div class="hero-in"><p class="eyebrow">新约书信 · 欧陆改革宗深读 · {VER}</p><h1>{title}</h1><p class="sub">{sub}</p></div></section>
-<div class="legend glass"><span class="key">重点</span><span class="hard">难点</span><span class="cov">圣约神学</span><span class="term">术语</span><button type="button" class="vs" data-t="点按蓝色经文出处，可弹出和合本经文。">经文出处</button><span class="lg-cci">📘📗📕 CCI 逐字引文</span></div>
+<div class="legend" id="legend"><span class="key">重点</span><span class="hard">难点</span><span class="cov">圣约</span><span class="term">术语</span><span class="app">应用</span><span class="mnemo">记忆</span><button type="button" class="vs" data-t="点按蓝色经文出处，可弹出和合本经文。">经文出处</button><span class="lg-cci">📘📗📕 CCI 逐字引文</span></div>
 {body}
 {pn}
 <footer class="foot glass"><p>新约书信深读 · nt-epistles-{DATE.replace("-","")}-{VER}-GROKstudy · 信经与信条引文逐字取自 <a href="https://ccifellowship.org/books/book-of-praise" target="_blank" rel="noopener">ccifellowship.org《敬拜手册》</a>（构建时程序核对）；经文为和合本。讲解、图表与口诀为本站学习整理。</p></footer>
 </main><button id="totop" class="fab" aria-label="回到顶部">↑</button>
-<script src="assets/app.js?v={ASSET_V}" defer></script></body></html>'''
+<script src="assets/app.js?v={ASSET_V}" defer></script><script src="assets/maps.js?v={ASSET_V}" defer></script></body></html>'''
 
 _W = json.load(open("/workspace/Westminster-Standards-GROKstudy/generator/data/standards.json"))
 def _ws(t): return re.sub(r'⟦\d+⟧', '', t)

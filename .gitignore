@@ -7,3 +7,4 @@ __pycache__/
 build/qa/*.png
 build/cache/live_cci.json
 CNAME
+docs/CNAME

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from common import md, esc
+from common import md, esc, tip
+
 from geo import bigmap, JOURNEYS
 from epi import GN
 TL=[(30,"w","耶稣受死、复活、升天；五旬节圣灵降临（徒1–2）","约主后 30 或 33 年"),(34,"w","司提反殉道；信徒分散（徒7–8）",""),(34,"p","扫罗在大马士革路上归信（徒9）","约 33–35"),
@@ -60,7 +61,9 @@ def build(eps):
     b.append('<h3 id="h1b">📊 21 卷书信写作年代图</h3><figure class="glass gwrap">'+gantt(eps)+'<figcaption>彩条颜色 = 书信组别（金：四大书信 · 蓝：帖撒罗尼迦 · 紫：狱中 · 绿：教牧 · 红：希伯来书 · 青：大公书信）</figcaption></figure>')
     b.append('<h2 id="h2">二、故事线：从五旬节到以弗所的约翰</h2><p>'+md("书信的“故事”藏在使徒行传与书信本身的线索里。把每卷书放回它的处境，“为什么写”就清楚了。")+'</p>'+story())
     lg="".join(f'<button class="lb on" data-l="{j}" style="--c:{c}">{n}</button>' for j,n,c,_ in JOURNEYS)+'<button class="lb on" data-l="ep" style="--c:#ffd36b">书信：写作地 → 收信地</button>'
-    b.append(f'<h2 id="h3">三、地图：保罗的行程与书信的路线</h2><div class="mapbox glass"><div class="maptools">{lg}<button class="lb play" id="playroutes">▶ 播放路线</button></div><p class="maphint">👉 手机上可左右滑动地图</p><div class="mapscroll" id="bigmap">{bigmap(eps)}</div><div id="cityinfo" class="cityinfo" aria-live="polite">点按地图上的城市，查看与它相关的书信。</div><p class="note">底图：Natural Earth（公有领域）海岸线与河流，构建时投影为本站静态 SVG（无第三方地图服务，离线可用）。路线为按使徒行传经过地点连成的示意线；手机上可左右滑动地图。</p></div>')
+    b.append(f'<h2 id="h3">三、地图：保罗的行程与书信的路线</h2><div class="mapbox glass"><div class="maptools">{lg}<button class="lb play" id="playroutes">▶ 播放路线</button></div><p class="maphint">👉 手机上可左右滑动地图</p><div class="mapscroll" id="bigmap">{bigmap(eps)}</div><div id="cityinfo" class="cityinfo" aria-live="polite">点按地图上的城市，查看与它相关的书信。</div><p class="note">本图为离线静态总图（Natural Earth）。需要缩放、切换卫星/古图或查看行省、航海、七教会等专题，请到 <a href="maps.html">地图馆</a>：每张图都配有概念讲解图 + 可切换底图的互动地图（网络失败自动回退到离线矢量）。</p></div>')
+    b.append(tip("key","先走故事再看地图","时间线给你年代，故事线给你因果，地图给你地点。三者合在一起，书信才不再是抽象篇章。"))
+    b.append('<p class="note"><a class="btn" href="maps.html">进入地图馆 →</a></p>')
     b.append('<h2 id="h4">四、收信地与文化区域</h2><div class="tbl"><table><thead><tr><th>地区</th><th>主要城市</th><th>相关书信</th><th>社会文化特征</th><th>宗教环境</th></tr></thead><tbody>'+"".join(f'<tr><td><b>{a}</b></td><td>{c}</td><td>{d}</td><td>{e}</td><td>{f}</td></tr>' for a,c,d,e,f in REG)+'</tbody></table></div>')
     b.append('<h2 id="h5">五、希腊罗马世界的十个关键词</h2><div class="kws">'+"".join(f'<div class="kwc glass reveal"><span>{a}</span><b>{c}</b><p>{md(d)}</p></div>' for a,c,d in KW)+'</div>')
     return "".join(b)

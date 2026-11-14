@@ -26,7 +26,7 @@ $('#tocq').addEventListener('input',function(){
 /* nav dropdown + theme */
 $('#navbtn').addEventListener('click',function(e){e.stopPropagation();$('#navdrop').classList.toggle('open')});
 document.addEventListener('click',function(e){if(!e.target.closest('#navdrop'))$('#navdrop').classList.remove('open')});
-$('#themebtn').addEventListener('click',function(){var t=html.dataset.theme==='light'?'night':'light';html.dataset.theme=t;store('nt-theme',t)});
+$('#themebtn').addEventListener('click',function(){var t=html.dataset.theme==='light'?'night':'light';html.dataset.theme=t;store('nt-theme',t);document.dispatchEvent(new CustomEvent('nt-theme'))});
 /* progress, scrollspy, totop */
 var links=$$('#toc a'),heads=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))}),prog=$('#prog'),top=$('#totop'),ticking=false;
 function onScroll(){
@@ -131,4 +131,25 @@ if(dEl){
 }
 /* draw svg in twoage */
 $$('.twoage').forEach(function(f){var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){$$('.draw',f).forEach(function(d){d.classList.add('in')});o.disconnect()}})});o.observe(f)});
+})();
+
+/* Lenis inertial scroll — skipped when user prefers reduced motion or if load fails */
+(function(){
+  try{ if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){return}
+  var s=document.createElement("script"); s.src="assets/vendor/lenis.min.js"; s.defer=true;
+  s.onload=function(){
+    if(!window.Lenis) return;
+    var opts={duration:1.05,lerp:.09,smoothWheel:true,syncTouch:false,anchors:true,autoRaf:true,prevent:function(n){return n.closest&&(n.closest("#toc")||n.closest(".imap")||n.closest(".mapscroll")||n.closest(".navdrop"))}};
+    var lenis; try{lenis=new Lenis(opts)}catch(e){try{delete opts.autoRaf;delete opts.anchors;lenis=new Lenis(opts);(function raf(t){lenis.raf(t);requestAnimationFrame(raf)})(0)}catch(e2){return}}
+    document.documentElement.classList.add("lenis");
+    window.NTLenis=lenis;
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener("click",function(ev){
+        var id=a.getAttribute("href"); if(!id||id==="#")return;
+        var el=document.getElementById(id.slice(1)); if(!el||!lenis)return;
+        ev.preventDefault(); lenis.scrollTo(el,{offset:-70}); history.pushState(null,"",id);
+      });
+    });
+  };
+  document.head.appendChild(s);
 })();

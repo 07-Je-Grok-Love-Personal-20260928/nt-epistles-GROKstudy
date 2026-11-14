@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import page, QUOTES, VER, DATE
 from eps1 import EPS1; from eps2 import EPS2; from eps3 import EPS3
 from epi import epistle, mindtree, gtable, GN
-import geo, p_whole, p_hist, p_doc, p_creed, p_mem, p_misc
+import geo, p_whole, p_hist, p_doc, p_creed, p_mem, p_misc, p_maps
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); D = os.path.join(ROOT, "docs")
 os.makedirs(os.path.join(D, "assets", "geo"), exist_ok=True)
 geo.base_svg(os.path.join(D, "assets", "geo", "med.svg"))
@@ -18,7 +18,8 @@ def W(fn, html):
     open(os.path.join(D, fn), "w", encoding="utf-8").write(html); print("wrote", fn, len(html)//1024, "KB")
 W("index.html", page("index.html", "新约书信深读", "罗马书到犹大书 21 卷 · 整本圣经与圣约 · 时间故事地图 · 欧陆改革宗 · 三项联合信条与三大信经逐字对照", p_misc.index(CAN), "home"))
 W("bible.html", page("bible.html", "整本圣经与圣约", "先看全景：书信在创造—堕落—救赎—成全的救赎历史与恩典之约中的位置", p_whole.build()))
-W("history.html", page("history.html", "时间 · 故事 · 地图", "主后 30–95 年：使徒行传的故事线、保罗的行程、21 卷书信的写作地与收信地、希腊罗马文化", p_hist.build(CAN)))
+W("history.html", page("history.html", "时间 · 故事 · 地图", "主后 30–95 年：使徒行传的故事线、保罗的行程、写作地与文化区域", p_hist.build(CAN)))
+W("maps.html", page("maps.html", "地图馆 · 行程与行省", "罗马帝国行省、四次旅行、押解罗马、彼得前书五省、七教会、耶路撒冷到地极：概念图 + 可切换底图的真实地图", p_maps.build(CAN)))
 from common import md
 grp("paul-major.html", "保罗四大书信", "罗马书 · 哥林多前书 · 哥林多后书 · 加拉太书——福音的核心与教会的实际", EPS1,
     md("这四卷写于第一、三次宣教旅行期间（约 48–57 年），篇幅最长、教义最集中：**因信称义**（罗、加）与**十字架下的教会生活**（林前、林后）。读的顺序建议：加拉太书 → 罗马书 → 哥林多前书 → 哥林多后书。"))

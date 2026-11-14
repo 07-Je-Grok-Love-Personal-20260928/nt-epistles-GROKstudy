@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from common import md, esc, cq, verse_card, vtext
 from geo import minimap
+from mapsui import letter_imap
 GN = {"major":("保罗 · 四大书信","#f5b942"),"early":("保罗 · 帖撒罗尼迦书信","#4fb3ff"),"prison":("保罗 · 狱中书信","#a78bfa"),
       "pastoral":("保罗 · 教牧书信","#3fd39a"),"heb":("希伯来书","#ff6b8b"),"gen":("大公书信","#2dd4bf")}
 def flow(steps, end):
@@ -24,7 +25,7 @@ def epistle(e):
     return f'''<section class="ep" id="{i}" style="--gc:{col}">
 <h2 id="{i}-t" class="ep-h"><span class="ei">{e["ic"]}</span>{e["n"]} <small>{e["en"]} · {gname}</small></h2>
 <div class="ep-banner glass reveal"><div class="kwbox"><span class="kwl">钥字</span><span class="kw">{e["kw"]}</span></div><p class="core">💎 {md(e["core"])}</p>{verse_card(e["kv"])}</div>
-<div class="facts-wrap"><div class="facts">{fx}</div><figure class="mm glass">{minimap(e)}<figcaption>✍ 写作地 → 📬 收信地（真实底图：Natural Earth；位置按经纬度）</figcaption></figure></div>
+<div class="facts-wrap"><div class="facts">{fx}</div><figure class="mm glass">{minimap(e)}<figcaption>✍ 写作地 → 📬 收信地（离线矢量底图：Natural Earth）</figcaption>{letter_imap(e)}</figure></div>
 <h3 id="{i}-bg">🏺 背景与真实情境</h3><div class="two"><div class="card glass"><h4>历史背景</h4><p>{md(e["bg"])}</p></div><div class="card glass culture"><h4>🌍 文化区域特征</h4><p>{md(e["cul"])}</p></div></div>
 <h3 id="{i}-why">❓ 为什么写（前因后果）</h3>{flow(e["why"], "于是写下《"+e["n"]+"》")}
 <h3 id="{i}-what">📐 写了什么（结构）</h3>{sbar(e["ol"])}<ol class="outline">{ol}</ol><div class="angs">{angs}</div>
